@@ -1,18 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "multiplicaMatriz.h"
- 
+#include "multiplicaMatriz.h" 
 
 int main (void) {
+
+    // Inicializa o contador do programa como um todo
+    clock_t begin = clock();
+
+    int threads;
+    int matSize;
+
+    // Seta o número de threads
+    printf("Digite o número de Threads que serão executadas: ");
+    scanf("%d",&threads);
+
+    // Seta o tamanho da matriz
+    printf("Digite o tamanho das matrizes a serem multiplicadas: ");
+    scanf("%d",&matSize);
 
     // Usa o tempo atual como ssed para geração de números aleatórios
     srand(time(0));
 
     // Matriz A
     Matriz matrizA;
-    matrizA.colunas = 2;
-    matrizA.linhas = 2;
+    matrizA.colunas = matSize;
+    matrizA.linhas = matSize;
     matrizA.valor = (int*) malloc (sizeof(int) * matrizA.colunas);
     
     preencheMatriz(&matrizA);
@@ -24,8 +37,8 @@ int main (void) {
 
     // Matriz B
     Matriz matrizB;
-    matrizB.colunas = 2;
-    matrizB.linhas = 2;
+    matrizB.colunas = matSize;
+    matrizB.linhas = matSize;
     matrizB.valor = (int*) malloc (sizeof(int) * matrizB.colunas);
     
     preencheMatriz(&matrizB);
@@ -37,8 +50,8 @@ int main (void) {
 
     // Multiplicação de Matrizes
     Matriz matrizC;
-    matrizC.colunas = 2;
-    matrizC.linhas = 2;
+    matrizC.colunas = matSize;
+    matrizC.linhas = matSize;
     matrizC.valor = (int*) malloc (sizeof(int) * matrizC.colunas);
     
     multMatrizes(&matrizA, &matrizB, &matrizC);
@@ -48,20 +61,11 @@ int main (void) {
 
     printf ("\n");
 
-    //Matriz matrizB = {4,4, 0};
+    // Finaliza o timer de execução do programa como um todo
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
-
-    /*printf("Enter age: ");
-    scanf("%d", &personPtr->age);*/
-
-    //showMatriz(&matrizA);
-
-    //Matriz matrizB = {4,4};
-    //preencheMatriz(&matrizB);
-    //showMatriz(&matrizB);
-
-
-    //a();
+    printf("Tempo de execução total do programa: %lf \n", time_spent);
 
     return 0;
 }

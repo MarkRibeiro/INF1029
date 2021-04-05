@@ -6,6 +6,6 @@ typedef struct Matriz{
 
 void preencheMatriz(Matriz *matriz);
 
-int multMatrizes(Matriz *matrizA, Matriz *matrizB, Matriz *matrizC);
+void multMatrizes(Matriz *matrizA, Matriz *matrizB, Matriz *matrizC);
 
 void showMatriz(Matriz *matriz);
