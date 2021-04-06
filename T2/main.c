@@ -56,7 +56,7 @@ int main (void) {
     
     multMatrizes(&matrizA, &matrizB, &matrizC);
 
-    printf("Matriz A x MatrizB:\n");
+    printf("Matriz A x Matriz B:\n");
     showMatriz(&matrizC);
 
     printf ("\n");

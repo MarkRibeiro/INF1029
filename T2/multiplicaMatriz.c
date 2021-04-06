@@ -15,33 +15,39 @@ void preencheMatriz(Matriz *matriz){
 	}
 }
 
-void multMatrizes(Matriz *matrizA, Matriz *matrizB, Matriz *matrizC){
+void multMatrizes (Matriz *matrizA,  Matriz *matrizB, Matriz *matrizC) {
 
 	// Inicializa o tempo de execução da multiplicação de matrizes
 	clock_t begin = clock();
 
-	unsigned long int m = matrizA->colunas, q = matrizB->linhas, n = matrizA->linhas;
-	int ValorMultiplicado;
+	// Número de linhas e colunas da matriz A, B e C são iguais
+    
+	for (int i=0;i<matrizA->linhas;i++) {
 
-	/*if((m%8!=0)||(q%8!=0)||(n%8!=0)||(matrizA->linhas!=matrizB->colunas)){
-		return 0;
-	}*/
+        for(int k=0;k<matrizA->colunas;k++) {
 
-    for(int i=0; i<m; i++){
-        for(int k=0;k<q;k++){
-            for(int j=0; j<n; j++){
-            	ValorMultiplicado = matrizA->valor[i*matrizA->linhas + j] * matrizB->valor[j*matrizB->linhas + k];
-            	matrizC->valor[i*matrizC->linhas + k] += ValorMultiplicado;                            
-            }
+            double acc=0;
+            for(int j=0;j<matrizB->colunas;j++) {
+
+				printf("linha da Matriz A: %lu \n", (i*matrizA->linhas + j));
+				printf("coluna da Matriz B: %lu \n", (i*matrizB->colunas + j));
+               acc += matrizA->valor[i*matrizA->linhas + j] * matrizB->valor[j*matrizB->colunas + k];
+			   
+			   //acc+=A[i][j] * B[j][k];
+            } 
+
+			matrizC->valor[i*matrizC->linhas + k]  = acc;         
+            //C[i][k]=acc;
         }
-        
     }
 
-    // Finaliza o tempo de execução da multiplicação de matrizes
+	// Finaliza o tempo de execução da multiplicação de matrizes
 	clock_t end = clock();
     printf("Tempo de execução da multiplicação de matrizes: %lf \n", (double)(end - begin) / CLOCKS_PER_SEC);
 	printf("\n");
+
 }
+
 
 void showMatriz(Matriz *matriz){
 
