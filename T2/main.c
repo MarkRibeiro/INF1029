@@ -20,7 +20,7 @@ int main (void) {
     scanf("%d",&matSize);
 
     // Usa o tempo atual como ssed para geração de números aleatórios
-    srand(time(0));
+    //srand(time(0));
 
     // Matriz A
     Matriz matrizA;
