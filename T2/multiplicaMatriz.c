@@ -5,11 +5,8 @@
 #include "multiplicaMatriz.h"
 
 typedef struct {
-	//int linhaA;
-	//int colunaB;
 	int startingLine;
 	int finishLine;
-	//Matriz mA;
 } calcula_matriz;
 
 void preencheMatriz(Matriz *matriz){
@@ -26,6 +23,9 @@ void preencheMatriz(Matriz *matriz){
 
 void multMatrizes (int numThreads) {
 
+	// Inicializa o contador do programa como um todo
+    clock_t begin = clock();
+
 	// Faz o vetor de threads
 	pthread_t threads[numThreads];
 	int threadCounter = 0;
@@ -39,6 +39,10 @@ void multMatrizes (int numThreads) {
 		args->startingLine = matrizSlitSize*t;
 		args->finishLine = args->startingLine + matrizSlitSize;
 
+		if (matrizA.linhas%numThreads != 0 && t == numThreads - 1){
+			args->finishLine += 1;
+		}
+
 		if(pthread_create(&threads[threadCounter], NULL, calculaMatriz, args)){
 			free(args);
 		}
@@ -49,11 +53,23 @@ void multMatrizes (int numThreads) {
 	for(int t=0; t < numThreads; t++){
 		pthread_join(threads[t],NULL); 
 	}
+
+	// Finaliza o timer de execução do programa como um todo
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("Tempo de execução total do programa: %lf \n", time_spent);
+
 }
 
 void *calculaMatriz(void *args){
 
 	calcula_matriz *val = args;
+
+	printf("args->startingLine %d\n", val->startingLine);
+	printf("args->finishingLine %d\n", val->finishLine);
+
+	printf("\n");
 
 	for (int linhaA=val->startingLine;linhaA<val->finishLine;linhaA++) {
         for(int colunaB=0;colunaB<matrizB.colunas;colunaB++) {
