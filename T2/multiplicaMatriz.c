@@ -30,7 +30,7 @@ void multMatrizes (int numThreads, Matriz *matrizA,  Matriz *matrizB, Matriz *ma
 	clock_t begin = clock();
 
 	// Faz o vetor de threads
-	pthread_t threads[numThreads];
+	//pthread_t threads[numThreads];
 	int threadCounter = 0;
 
 	// Número de linhas e colunas da matriz A, B e C são iguais
@@ -62,7 +62,7 @@ void multMatrizes (int numThreads, Matriz *matrizA,  Matriz *matrizB, Matriz *ma
 			}*/
 
 			calculaMatriz(args);
-			free(args);
+			//free(args);
 
 			threadCounter += 1;
 
@@ -109,7 +109,7 @@ void *calculaMatriz(void *args){
 	matrizC->valor[linhaA*matrizC->linhas + colunaB]  = acc;         
 
 	// Encerra aquela thread
-	pthread_exit(NULL); 
+	//pthread_exit(NULL); 
 
 }
 

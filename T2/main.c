@@ -52,9 +52,11 @@ int main (void) {
     Matriz matrizC;
     matrizC.colunas = matSize;
     matrizC.linhas = matSize;
-    matrizC.valor = (int*) malloc (sizeof(int) * matrizC.colunas);
+    matrizC.valor = (int*) malloc (sizeof(int) * (matrizC.colunas));
     
+    printf("Entrei\n");
     multMatrizes(threads, &matrizA, &matrizB, &matrizC);
+    printf("Sai\n");
 
     printf("Matriz A x Matriz B:\n");
     showMatriz(&matrizC);
