@@ -5,8 +5,11 @@
 #include "multiplicaMatriz.h"
 
 typedef struct {
-	int linhaA;
-	int colunaB;
+	//int linhaA;
+	//int colunaB;
+	int startingLine;
+	int finishLine;
+	//Matriz mA;
 } calcula_matriz;
 
 void preencheMatriz(Matriz *matriz){
@@ -30,28 +33,20 @@ void multMatrizes (int numThreads) {
 	pthread_t threads[numThreads];
 	int threadCounter = 0;
 
+	int matrizSlitSize = matrizA.linhas/numThreads;
+
 	// Número de linhas e colunas da matriz A, B e C são iguais
-    
-	for (int i=0;i<matrizA.linhas;i++) {
-        for(int j=0;j<matrizA.colunas;j++) {
+	for (int t=0; t < numThreads; t++){
 
-			// Cria as threads para fazer os calculo de Matriz A * Matriz B
-			calcula_matriz *args = (calcula_matriz*) malloc (sizeof (calcula_matriz));
-			args->linhaA = i;
-			args->colunaB = j;
+		calcula_matriz *args = (calcula_matriz*) malloc (sizeof (calcula_matriz));
+		args->startingLine = matrizSlitSize*t;
+		args->finishLine = args->startingLine + matrizSlitSize;
 
-			if(pthread_create(&threads[threadCounter], NULL, calculaMatriz, args)){
-				free(args);
-			}
+		if(pthread_create(&threads[threadCounter], NULL, calculaMatriz, args)){
+			free(args);
+		}
 
-			threadCounter += 1;
-
-			if (threadCounter == numThreads){
-				threadCounter = 0;
-			}
-            
-        }
-    }
+	}
 
 	// Espera todas as threads terminarem de executar
 	for(int t=0; t < numThreads; t++){
@@ -69,15 +64,18 @@ void *calculaMatriz(void *args){
 
 	calcula_matriz *val = args;
 
-	int linhaA = val->linhaA;
-	int colunaB = val->colunaB;
+	for (int linhaA=val->startingLine;linhaA<val->finishLine;linhaA++) {
+        for(int colunaB=0;colunaB<matrizB.colunas;colunaB++) {
 
-	int acc=0;
-	for(int i=0; i<matrizA.linhas; i++) {
-		acc += matrizA.valor[linhaA*matrizA.linhas + i] * matrizB.valor[i*matrizB.colunas + colunaB];		
-	} 
+			int acc=0;
+			for(int k=0; k<matrizA.linhas; k++) {
+				acc += matrizA.valor[linhaA*matrizA.linhas + k] * matrizB.valor[k*matrizB.colunas + colunaB];		
+			} 
 
-	matrizC.valor[linhaA*matrizC.linhas + colunaB] = acc;         
+			matrizC.valor[linhaA*matrizC.linhas + colunaB] = acc;  
+
+		}
+	}
 
 	// Encerra aquela thread
 	pthread_exit(NULL); 
