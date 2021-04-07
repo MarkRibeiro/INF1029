@@ -5,9 +5,6 @@
 
 int main (void) {
 
-    // Inicializa o contador do programa como um todo
-    clock_t begin = clock();
-
     int threads;
     int matSize;
 
@@ -19,47 +16,49 @@ int main (void) {
     printf("Digite o tamanho das matrizes a serem multiplicadas: ");
     scanf("%d",&matSize);
 
+    // Inicializa o contador do programa como um todo
+    clock_t begin = clock();
+
     // Usa o tempo atual como ssed para geração de números aleatórios
     //srand(time(0));
 
     // Matriz A
-    Matriz matrizA;
     matrizA.colunas = matSize;
     matrizA.linhas = matSize;
-    matrizA.valor = (int*) malloc (sizeof(int) * matrizA.colunas);
+    matrizA.valor = (int*) malloc (sizeof(int) * matrizA.colunas * matrizA.linhas);
     
     preencheMatriz(&matrizA);
 
-    printf("Matriz A:\n");
-    showMatriz(&matrizA);
+    //printf("Matriz A:\n");
+    //showMatriz(&matrizA);
 
-    printf ("\n");
+    //printf ("\n");
 
     // Matriz B
-    Matriz matrizB;
     matrizB.colunas = matSize;
     matrizB.linhas = matSize;
-    matrizB.valor = (int*) malloc (sizeof(int) * matrizB.colunas);
+    matrizB.valor = (int*) malloc (sizeof(int) * matrizB.colunas * matrizB.linhas);
     
     preencheMatriz(&matrizB);
 
-    printf("Matriz B:\n");
-    showMatriz(&matrizB);
+    //printf("Matriz B:\n");
+    //showMatriz(&matrizB);
 
-    printf ("\n");
+    //printf ("\n");
 
     // Multiplicação de Matrizes
-    Matriz matrizC;
     matrizC.colunas = matSize;
     matrizC.linhas = matSize;
-    matrizC.valor = (int*) malloc (sizeof(int) * (matrizC.colunas));
+    matrizC.valor = (int*) malloc (sizeof(int) * matrizC.colunas  * matrizC.linhas);
+
+    //preencheMatriz(&matrizC);
     
-    multMatrizes(threads, &matrizA, &matrizB, &matrizC);
+    multMatrizes(threads);
 
-    printf("Matriz A x Matriz B:\n");
-    showMatriz(&matrizC);
+    //printf("Matriz A x Matriz B:\n");
+    //showMatriz(&matrizC);
 
-    printf ("\n");
+    //printf ("\n");
 
     // Finaliza o timer de execução do programa como um todo
     clock_t end = clock();
