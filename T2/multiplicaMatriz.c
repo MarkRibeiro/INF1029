@@ -26,9 +26,6 @@ void preencheMatriz(Matriz *matriz){
 
 void multMatrizes (int numThreads) {
 
-	// Inicializa o tempo de execução da multiplicação de matrizes
-	clock_t begin = clock();
-
 	// Faz o vetor de threads
 	pthread_t threads[numThreads];
 	int threadCounter = 0;
@@ -52,12 +49,6 @@ void multMatrizes (int numThreads) {
 	for(int t=0; t < numThreads; t++){
 		pthread_join(threads[t],NULL); 
 	}
-
-	// Finaliza o tempo de execução da multiplicação de matrizes
-	clock_t end = clock();
-    printf("Tempo de execução da multiplicação de matrizes: %lf \n", (double)(end - begin) / CLOCKS_PER_SEC);
-	printf("\n");
-
 }
 
 void *calculaMatriz(void *args){
