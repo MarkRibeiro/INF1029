@@ -41,9 +41,17 @@ void multMatrizes (int numThreads, Matriz *matrizA,  Matriz *matrizB, Matriz *ma
 			// Cria as threads para fazer os calculo de Matriz A * Matriz B
 			//printf("\nUsando a Thread: %d\n", threadCounter + 1);
 			calcula_matriz *args = (calcula_matriz*) malloc (sizeof (calcula_matriz));
+			//calcula_matriz *args;
+		
+
+			showMatriz(matrizB);
+
 
 			//args->ma = (int*) malloc (sizeof(int) * matrizA->linhas);
 			args->mA = matrizA;
+
+			showMatriz(matrizB);
+
 			//args.matrizB = (Matriz*) malloc (sizeof(Matriz) * matrizB->colunas);
 			args->mB = matrizB;
 			args->mC = matrizC;
@@ -54,10 +62,11 @@ void multMatrizes (int numThreads, Matriz *matrizA,  Matriz *matrizB, Matriz *ma
 				free(args);
 			}*/
 
-			printf("AAAA %d\n", matrizB);
-			printf("BBBB %d\n", args->mB);
-
+			//printf("AAAA %d\n", matrizB);
+			//printf("BBBB %d\n", args->mB);
+			showMatriz(matrizB);
 			showMatriz(args->mB);
+			showMatriz(matrizB);
 
 
 			calculaMatriz(args);
