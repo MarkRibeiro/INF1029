@@ -5,9 +5,9 @@
 #include "multiplicaMatriz.h"
 
 typedef struct {
-    Matriz *matrizA;
-	Matriz *matrizB;
-	Matriz *matrizC;
+    Matriz *mA;
+	Matriz *mB;
+	Matriz *mC;
 	int linhaA;
 	int colunaB;
 } calcula_matriz;
@@ -40,28 +40,30 @@ void multMatrizes (int numThreads, Matriz *matrizA,  Matriz *matrizB, Matriz *ma
 
 			// Cria as threads para fazer os calculo de Matriz A * Matriz B
 			//printf("\nUsando a Thread: %d\n", threadCounter + 1);
-
-			showMatriz(matrizB);
-
 			calcula_matriz *args = (calcula_matriz*) malloc (sizeof (calcula_matriz));
 
-			//args.matrizA = (Matriz*) malloc (sizeof(Matriz) * matrizA->linhas);
-			args->matrizA = matrizA;
-
+			//args->ma = (int*) malloc (sizeof(int) * matrizA->linhas);
+			args->mA = matrizA;
 			//args.matrizB = (Matriz*) malloc (sizeof(Matriz) * matrizB->colunas);
-			args->matrizB = matrizB;
-			args->matrizC = matrizC;
+			args->mB = matrizB;
+			args->mC = matrizC;
 			args->linhaA = i;
 			args->colunaB = j;
-
-			showMatriz(matrizB);
-
 
 			/*if(pthread_create(&threads[threadCounter], NULL, calculaMatriz, args)){
 				free(args);
 			}*/
 
+			printf("AAAA %d\n", matrizB);
+			printf("BBBB %d\n", args->mB);
+
+			showMatriz(args->mB);
+
+
 			calculaMatriz(args);
+
+
+
 			free(args);
 
 			threadCounter += 1;
@@ -89,27 +91,34 @@ void *calculaMatriz(void *args){
 
 	calcula_matriz *val = args;
 
+	showMatriz(val->mB);
+
+
 	int linhaA = val->linhaA;
 	int colunaB = val->colunaB;
-	Matriz *matrizA = val->matrizA;
-	Matriz *matrizB = val->matrizB;
-	Matriz *matrizC = val->matrizC;
+	Matriz *matA = val->mA;
+	Matriz *matB = val->mB;
+	Matriz *matC = val->mC;
 
 	printf("linha da Matriz A: %d \n", (linhaA));
 	printf("coluna da Matriz B: %d \n", (colunaB));
 
-	double acc=0;
-	for(int i=0; i<matrizA->linhas; i++) {
+	showMatriz(matB);
+	showMatriz(val->mB);
 
-		printf("linha A: %d coluna A:%d posição no array A: %lu -> %d\n", linhaA, i, (linhaA*matrizA->linhas + i), matrizA->valor[linhaA*matrizA->linhas + i]);
-		printf("linha B: %d coluna B:%d posição no array B: %lu -> %d\n \n", i, colunaB, (i*matrizB->colunas + colunaB), matrizB->valor[i*matrizB->colunas + colunaB]);
-		acc += matrizA->valor[linhaA*matrizA->linhas + i] * matrizB->valor[i*matrizB->colunas + colunaB];		
+
+	double acc=0;
+	for(int i=0; i<matA->linhas; i++) {
+
+		printf("linha A: %d coluna A:%d posição no array A: %lu -> %d\n", linhaA, i, (linhaA*matA->linhas + i), matA->valor[linhaA*matA->linhas + i]);
+		printf("linha B: %d coluna B:%d posição no array B: %lu -> %d\n \n", i, colunaB, (i*matB->colunas + colunaB), matB->valor[i*matB->colunas + colunaB]);
+		acc += matA->valor[linhaA*matA->linhas + i] * matB->valor[i*matB->colunas + colunaB];		
 	} 
 
-	matrizC->valor[linhaA*matrizC->linhas + colunaB]  = acc;         
+	matC->valor[linhaA*matC->linhas + colunaB]  = acc;         
 
 	// Encerra aquela thread
-	pthread_exit(NULL); 
+	//pthread_exit(NULL); 
 
 }
 
@@ -121,7 +130,7 @@ void showMatriz(Matriz *matriz){
 
 	for(i=0;i<m; i++){
 		for(j=0; j<n; j++){
-			printf(" %d ",matriz->valor[i*n + j]);
+			printf(" %d ", matriz->valor[i*n + j]);
 		}
 		printf("\n");
 	}
