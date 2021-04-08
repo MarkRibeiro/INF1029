@@ -58,7 +58,6 @@ void multMatrizes (int numThreads) {
 	free(threads);
 
 	// Finaliza o timer de execução do programa como um todo
-
 	struct timeval end_time;
   	gettimeofday(&end_time, NULL);
 
@@ -73,11 +72,6 @@ void multMatrizes (int numThreads) {
 void *calculaMatriz(void *args){
 
 	calcula_matriz *val = args;
-
-	printf("args->startingLine %d\n", val->startingLine);
-	printf("args->finishingLine %d\n", val->finishLine);
-
-	printf("\n");
 
 	for (int linhaA=val->startingLine;linhaA<val->finishLine;linhaA++) {
         for(int colunaB=0;colunaB<matrizB.colunas;colunaB++) {
