@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 #include "multiplicaMatriz.h" 
 
 int main (void) {
@@ -17,7 +17,8 @@ int main (void) {
     scanf("%d",&matSize);
 
     // Inicializa o contador do programa como um todo
-    clock_t begin = clock();
+    struct timeval start_time;
+    gettimeofday(&start_time, NULL);
 
     // Usa o tempo atual como ssed para geração de números aleatórios
     //srand(time(0));
@@ -59,10 +60,14 @@ int main (void) {
         //printf ("\n");
 
     // Finaliza o timer de execução do programa como um todo
-    clock_t end = clock();
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    struct timeval end_time;
+    gettimeofday(&end_time, NULL);
+    
+    double start_time_mili = start_time.tv_sec*1000000 + start_time.tv_usec;
+    double end_time_mili = end_time.tv_sec*1000000 + end_time.tv_usec;
+    double total_time = (end_time_mili - start_time_mili)/1000000;
 
-    printf("Tempo de execução total do programa: %lf \n", time_spent);
+    printf("Tempo de execução total do programa: %lf \n", total_time);
 
     return 0;
 }

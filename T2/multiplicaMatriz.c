@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <pthread.h>
+#include <sys/time.h>
 #include "multiplicaMatriz.h"
 
 typedef struct {
@@ -24,10 +24,11 @@ void preencheMatriz(Matriz *matriz){
 void multMatrizes (int numThreads) {
 
 	// Inicializa o contador do programa como um todo
-    clock_t begin = clock();
+    struct timeval start_time;
+  	gettimeofday(&start_time, NULL);
 
 	// Faz o vetor de threads
-	pthread_t threads[numThreads];
+	pthread_t *threads = (pthread_t*) malloc (numThreads * sizeof (pthread_t));
 	int threadCounter = 0;
 
 	int matrizSlitSize = matrizA.linhas/numThreads;
@@ -54,11 +55,18 @@ void multMatrizes (int numThreads) {
 		pthread_join(threads[t],NULL); 
 	}
 
-	// Finaliza o timer de execução do programa como um todo
-    clock_t end = clock();
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	free(threads);
 
-    printf("Tempo de execução total do programa: %lf \n", time_spent);
+	// Finaliza o timer de execução do programa como um todo
+
+	struct timeval end_time;
+  	gettimeofday(&end_time, NULL);
+
+  	double start_time_mili = start_time.tv_sec*1000000 + start_time.tv_usec;
+  	double end_time_mili = end_time.tv_sec*1000000 + end_time.tv_usec;
+	double total_time = (end_time_mili - start_time_mili)/1000000;
+
+    printf("Tempo de execução da multiplicacao da matriz: %lf \n", total_time);
 
 }
 
