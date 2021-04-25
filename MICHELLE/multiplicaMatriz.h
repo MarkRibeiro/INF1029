@@ -1,14 +1,14 @@
 typedef struct Matriz{
 	unsigned long int colunas;
 	unsigned long int linhas;
-	int *valor;
+	float *valor;
 } Matriz;
 
 Matriz matrizA;
 Matriz matrizB;
 Matriz matrizC;
 
-void preencheMatriz(Matriz *matriz);
+void preencheMatriz(Matriz *matriz, float value);
 
 void multMatrizes(int Threads);
 
