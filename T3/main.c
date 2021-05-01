@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include "multiplicaMatriz.h" 
 
 int main (int argc, char *argv[]) {
 
@@ -19,29 +18,7 @@ int main (int argc, char *argv[]) {
     struct timeval start_time;
     gettimeofday(&start_time, NULL);
 
-    // Usa o tempo atual como ssed para geração de números aleatórios
-    //srand(time(0));
 
-    // Matriz A
-    matrizA.colunas = matSize;
-    matrizA.linhas = matSize;
-    matrizA.valor = (float*) aligned_alloc (32, sizeof(float) * matrizA.colunas * matrizA.linhas);
-    
-    preencheMatriz(&matrizA, 5);
-
-    // Matriz B
-    matrizB.colunas = matSize;
-    matrizB.linhas = matSize;
-    matrizB.valor = (float*) aligned_alloc (32, sizeof(float) * matrizB.colunas * matrizB.linhas);
-    
-    preencheMatriz(&matrizB, 2);
-
-    // Multiplicação de Matrizes
-    matrizC.colunas = matSize;
-    matrizC.linhas = matSize;
-    matrizC.valor = (float*) aligned_alloc (32, sizeof(float) * matrizC.colunas  * matrizC.linhas);
-    
-    multMatrizes(threads);
 
     // Finaliza o timer de execução do programa como um todo
     struct timeval end_time;
