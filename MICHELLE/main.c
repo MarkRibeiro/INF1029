@@ -19,10 +19,10 @@ int main (int argc, char *argv[]) {
 
     preencheMatriz(&matrizA, 5.0f);
 
-        //printf("Matriz A:\n");
-        //showMatriz(&matrizA);
+        printf("Matriz A:\n");
+        showMatriz(&matrizA);
 
-        //printf ("\n");
+        printf ("\n");
 
     // Matriz B
     matrizB.colunas = matSize;
@@ -31,22 +31,22 @@ int main (int argc, char *argv[]) {
     
     preencheMatriz(&matrizB, 2.0f);
 
-        //printf("Matriz B:\n");
-        //showMatriz(&matrizB);
+        printf("Matriz B:\n");
+        showMatriz(&matrizB);
 
-        //printf ("\n");
+        printf ("\n");
 
     // Multiplicação de Matrizes
     matrizC.colunas = matSize;
     matrizC.linhas = matSize;
     matrizC.valor = (float*)aligned_alloc(32,matSize*matSize*sizeof(float));
     
-    //multMatrizes(threads);
+    multMatrizes(threads);
 
-        //printf("Matriz A x Matriz B:\n");
-        //showMatriz(&matrizC);
+        printf("Matriz A x Matriz B:\n");
+        showMatriz(&matrizC);
 
-        //printf ("\n");
+        printf ("\n");
 
     // Finaliza o timer de execução do programa como um todo
     clock_t end = clock();

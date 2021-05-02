@@ -36,8 +36,8 @@ void multMatrizes (int numThreads) {
 	for (int t=0; t < numThreads; t++){
 
 		calcula_matriz *args = (calcula_matriz*) malloc (sizeof (calcula_matriz));
-		args->startingLine = matrizSplitSize*t*8;
-		args->finishLine = args->startingLine + matrizSplitSize*8;	// Prob adicionar 8 aqui
+		args->startingLine = matrizSplitSize*t;
+		args->finishLine = args->startingLine + matrizSplitSize;
 
 		if (matrizA.linhas%numThreads != 0 && t == numThreads - 1){
 			args->finishLine += 1;
@@ -58,16 +58,13 @@ void multMatrizes (int numThreads) {
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
-    printf("Tempo de execução total do programa: %lf \n", time_spent);
+    printf("Tempo de execução total do calculo da matriz: %lf \n", time_spent);
 
 }
 
 void *calculaMatriz(void *args){
 
 	calcula_matriz *val = args;
-
-	printf("args->startingLine %d\n", val->startingLine);
-	printf("args->finishingLine %d\n", val->finishLine);
 
 	printf("\n");
 
@@ -76,17 +73,58 @@ void *calculaMatriz(void *args){
 	int colunasMatrizB = matrizB.colunas;
 	int linhasMatrizA = matrizA.linhas;
 
-	for (int linhaA=inicio;linhaA<fim;linhaA+=8) {
-        for(int colunaB=0;colunaB<colunasMatrizB;colunaB+=8) {
+	__m256 a;
+	__m256 b;
+	__m256 c;
+	__m256 escalar_a_b;
 
+	float *valorA = matrizA.valor;
+	float *valorB = matrizB.valor;
+	float *valorC = matrizC.valor;
+
+	for (int linhaA=inicio;linhaA<fim; linhaA++/*, valorA+=8*/) {
+
+		//Selecionando a linha de C para ser a mesma de A
+		//valorC = matrizC.valor+(linhaA*matrizA.colunas);
+
+		//Selecionando elementos de A
+        for(int colunaB=0;colunaB<colunasMatrizB;colunaB++) {
+			
+			_mm256_load_ps
+			//a = _mm256_set1_ps(valorA[j]);
 			int acc=0;
-			for(int k=0; k<linhasMatrizA; k++) {
-				acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];		
+			for(int k=0; k<colunasMatrizB; k++/*, valorB+=8, valorC+=8*/) {
+
+				/*if(j==0){
+					//Zerando a linha de C
+					c = _mm256_set1_ps(0);
+				} else {
+					c = _mm256_load_ps(valorC);
+				}*/
+
+				//b = _mm256_load_ps(valorB);
+				
+				//escalar_a_b = _mm256_fmadd_ps(a, b, c);
+				acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];
+				//printf("%d ", acc);
+				
+
+				//acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];		
 			} 
 
-			matrizC.valor[linhaA*matrizC.linhas + colunaB] = acc;  
+			printf("%d ", acc);
+			//__m256 val = _mm256_set1_ps(acc);
+			//_mm256_store_ps(valorC, val);
+			valorC[linhaA*linhasMatrizA + colunaB] = acc;
+			printf("\nvalor que vai ser armazenado: %.1f \n", valorC[linhaA*linhasMatrizA + colunaB]);
+
+
+			//valorC = matrizC.valor+(i*colunasMatrizB);
+			//matrizC.valor[linhaA*matrizC.linhas + colunaB] = acc;  
 
 		}
+
+		//valorB = matrizB.valor;
 	}
 	
 	// Encerra aquela thread
@@ -103,7 +141,7 @@ void showMatriz(Matriz *matriz){
 
 	for(i=0;i<m; i++){
 		for(j=0; j<n; j++){
-			printf(" %f ", matriz->valor[i*n + j]);
+			printf(" %.1f ", matriz->valor[i*n + j]);
 		}
 		printf("\n");
 	}
