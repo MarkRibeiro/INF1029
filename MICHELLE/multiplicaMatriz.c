@@ -43,10 +43,8 @@ void multMatrizes (int numThreads) {
 			args->finishLine += 1;
 		}
 
-		if(pthread_create(&threads[threadCounter], NULL, calculaMatriz, args)){
-			printf("saiiii\n");
+		if(pthread_create(&threads[t], NULL, calculaMatriz, args)){
 			free(args);
-			printf("Não foi aqui victor, relaxa\n");
 		}
 
 		printf("start: %d\nFinish: %d\n", args->startingLine, args->finishLine);
@@ -88,27 +86,29 @@ void *calculaMatriz(void *args){
 
 		//Selecionando a linha de C para ser a mesma de A
 		//valorC = matrizC.valor+(linhaA*matrizA.colunas);
-		printf("LinhaA: %d\n", linhaA);
 		//Selecionando elementos de A
-        for(int colunaB=0;colunaB<colunasMatrizB;colunaB++) {
+        for(int colunaBi=0;colunaBi<colunasMatrizB;colunaBi+=8) {
 			
 			//a = _mm256_set1_ps(valorA[j]);
-			int acc=0;
-			for(int k=0; k<colunasMatrizB; k++/*, valorB+=8, valorC+=8*/) {
-				printf("%d ", k);
-				acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];
+			__m256 acc = _mm256_loadu_ps(&matrizA.valor[linhaA*linhasMatrizA + colunaBi]);
+			for(int colunaBj=0;colunaBj<colunasMatrizB;colunaBj+=8) {
+				__m256 pLinhaA = _mm256_loadu_ps(&matrizB.valor[colunaBi*linhasMatrizA + colunaBj]);
+				__m256 pLinhaC = _mm256_loadu_ps(&matrizC.valor[linhaA*linhasMatrizA + colunaBj]);
+				__m256 pLinhaf = _mm256_fmadd_ps(pLinhaA, acc, pLinhaC);
+				_mm256_store_ps(&matrizC.valor[linhaA*linhasMatrizA + colunaBj], pLinhaf);
+				printf("aqui: %f\n", matrizC.valor[linhaA*linhasMatrizA + colunaBj]);
+
+				//acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];
 			} 
-			printf("\nlinha: %d coluna: %d\n", linhaA, colunaB);
-			valorC[linhaA*linhasMatrizA + colunaB] = acc;
-			printf("Victor\n");
+
+			
+			//valorC[linhaA*linhasMatrizA + colunaB] = acc;
 			//printf("\nvalor que vai ser armazenado: %.1f \n", valorC[linhaA*linhasMatrizA + colunaB]);
 
 		}
-		printf("sai do segundo for\n");
 
 		//valorB = matrizB.valor;
 	}
-	printf("sai do terceiro for\n");
 	
 	// Encerra aquela thread
 	pthread_exit(NULL); 
