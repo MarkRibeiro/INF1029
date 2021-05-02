@@ -4,10 +4,12 @@
 #include <immintrin.h>
 #include "multiplicaMatriz.h" 
 
-int main (int argc, char *argv[]) {
+int main (/*int argc, char *argv[]*/) {
 
-    int threads = atoi(argv[1]);
-    int matSize = atoi(argv[2]);
+    //int threads = atoi(argv[1]);
+    //int matSize = atoi(argv[2]);
+    int threads = 2;
+    int matSize = 32;
 
     // Inicializa o contador do programa como um todo
     clock_t begin = clock();
@@ -44,9 +46,9 @@ int main (int argc, char *argv[]) {
     multMatrizes(threads);
 
         printf("Matriz A x Matriz B:\n");
-        showMatriz(&matrizC);
+        //showMatriz(&matrizC);
 
-        printf ("\n");
+        printf("\n");
 
     // Finaliza o timer de execução do programa como um todo
     clock_t end = clock();

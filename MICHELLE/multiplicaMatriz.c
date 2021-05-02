@@ -44,16 +44,18 @@ void multMatrizes (int numThreads) {
 		}
 
 		if(pthread_create(&threads[threadCounter], NULL, calculaMatriz, args)){
+			printf("saiiii\n");
 			free(args);
+			printf("Não foi aqui victor, relaxa\n");
 		}
 
-	}
+		printf("start: %d\nFinish: %d\n", args->startingLine, args->finishLine);
 
+	}
 	// Espera todas as threads terminarem de executar
 	for(int t=0; t < numThreads; t++){
 		pthread_join(threads[t],NULL); 
 	}
-
 	// Finaliza o timer de execução do programa como um todo
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
@@ -86,46 +88,27 @@ void *calculaMatriz(void *args){
 
 		//Selecionando a linha de C para ser a mesma de A
 		//valorC = matrizC.valor+(linhaA*matrizA.colunas);
-
+		printf("LinhaA: %d\n", linhaA);
 		//Selecionando elementos de A
         for(int colunaB=0;colunaB<colunasMatrizB;colunaB++) {
 			
-			_mm256_load_ps
 			//a = _mm256_set1_ps(valorA[j]);
 			int acc=0;
 			for(int k=0; k<colunasMatrizB; k++/*, valorB+=8, valorC+=8*/) {
-
-				/*if(j==0){
-					//Zerando a linha de C
-					c = _mm256_set1_ps(0);
-				} else {
-					c = _mm256_load_ps(valorC);
-				}*/
-
-				//b = _mm256_load_ps(valorB);
-				
-				//escalar_a_b = _mm256_fmadd_ps(a, b, c);
+				printf("%d ", k);
 				acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];
-				//printf("%d ", acc);
-				
-
-				//acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];		
 			} 
-
-			printf("%d ", acc);
-			//__m256 val = _mm256_set1_ps(acc);
-			//_mm256_store_ps(valorC, val);
+			printf("\nlinha: %d coluna: %d\n", linhaA, colunaB);
 			valorC[linhaA*linhasMatrizA + colunaB] = acc;
-			printf("\nvalor que vai ser armazenado: %.1f \n", valorC[linhaA*linhasMatrizA + colunaB]);
-
-
-			//valorC = matrizC.valor+(i*colunasMatrizB);
-			//matrizC.valor[linhaA*matrizC.linhas + colunaB] = acc;  
+			printf("Victor\n");
+			//printf("\nvalor que vai ser armazenado: %.1f \n", valorC[linhaA*linhasMatrizA + colunaB]);
 
 		}
+		printf("sai do segundo for\n");
 
 		//valorB = matrizB.valor;
 	}
+	printf("sai do terceiro for\n");
 	
 	// Encerra aquela thread
 	pthread_exit(NULL); 

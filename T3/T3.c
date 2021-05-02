@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <immintrin.h>
 
-void printaMatriz(int **mat, int tam, char *nome){
+void printaMatriz(float **mat, int tam, char *nome){
 
     printf("%s\n", nome);
 
@@ -13,10 +13,10 @@ void printaMatriz(int **mat, int tam, char *nome){
         for(int j=0;j<tam;j++){
 
             if(j == tam - 1){
-                printf("%d",mat[i][j]);
+                printf("%.2f",mat[i][j]);
             } 
             else{
-                printf("%d, ",mat[i][j]);
+                printf("%.2f, ",mat[i][j]);
             }
 
         }
@@ -25,10 +25,10 @@ void printaMatriz(int **mat, int tam, char *nome){
     printf("\n");
 }
 
-void inicializaMatriz(int **mat, int tam, int val){
+void inicializaMatriz(float **mat, int tam, int val){
     
     for(int i=0;i<tam;i++){
-        mat[i] = (int*) malloc (tam * sizeof (float));
+        mat[i] = (float*) aligned_alloc (32, tam * sizeof (float));
     }
 
     for(int i=0;i<tam;i++){
@@ -41,7 +41,7 @@ void inicializaMatriz(int **mat, int tam, int val){
 void main (int argc, char *argv[]){
     int tam = atoi(argv[1]);
     float mult = atoi(argv[2]);
-    int *MA[tam], *MB[tam];
+    float *MA[tam], *MB[tam];
 
     float *ma = (float*) aligned_alloc (32, tam * sizeof (float));
     float *mb = (float*) aligned_alloc (32, tam * sizeof (float));
