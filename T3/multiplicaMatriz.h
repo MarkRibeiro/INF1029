@@ -4,6 +4,12 @@ typedef struct Matriz{
 	float *valor;
 } Matriz;
 
+Matriz matrizA;
+Matriz matrizB;
+Matriz matrizC;
+
+void preencheMatriz(Matriz *matriz, float value);
+
 void multMatrizes(int Threads);
 
 void *calculaMatriz(void *args);
