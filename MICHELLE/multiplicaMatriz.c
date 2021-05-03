@@ -47,8 +47,6 @@ void multMatrizes (int numThreads) {
 			free(args);
 		}
 
-		printf("start: %d\nFinish: %d\n", args->startingLine, args->finishLine);
-
 	}
 	// Espera todas as threads terminarem de executar
 	for(int t=0; t < numThreads; t++){
@@ -66,8 +64,6 @@ void *calculaMatriz(void *args){
 
 	calcula_matriz *val = args;
 
-	printf("\n");
-
 	int inicio = val->startingLine;
 	int fim = val->finishLine;
 	int colunasMatrizB = matrizB.colunas;
@@ -82,37 +78,24 @@ void *calculaMatriz(void *args){
 	float *valorB = matrizB.valor;
 	float *valorC = matrizC.valor;
 
-	for (int linhaA=inicio;linhaA<fim; linhaA++/*, valorA+=8*/) {
+	for (int linhaA=inicio;linhaA<fim; linhaA++) {
 
 		//Selecionando a linha de C para ser a mesma de A
 		//valorC = matrizC.valor+(linhaA*matrizA.colunas);
 		//Selecionando elementos de A
         for(int colunaBi=0;colunaBi<colunasMatrizB;colunaBi++) {
-			
-			//a = _mm256_set1_ps(valorA[j]);
 			__m256 acc = _mm256_set1_ps(matrizA.valor[linhaA*linhasMatrizA + colunaBi]);
 			for(int colunaBj=0;colunaBj<colunasMatrizB;colunaBj+=8) {
 				__m256 pLinhaA = _mm256_load_ps(&matrizB.valor[linhaA*linhasMatrizA + colunaBj]);
 				__m256 pLinhaC = _mm256_load_ps(&matrizC.valor[linhaA*linhasMatrizA + colunaBj]);
 				__m256 pLinhaf = _mm256_fmadd_ps(pLinhaA, acc, pLinhaC);
 				_mm256_store_ps(&matrizC.valor[linhaA*linhasMatrizA + colunaBj], pLinhaf);
-
-				//acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];
-			} 
-
-			
-			//valorC[linhaA*linhasMatrizA + colunaB] = acc;
-			//printf("\nvalor que vai ser armazenado: %.1f \n", valorC[linhaA*linhasMatrizA + colunaB]);
-
+			}
 		}
-
-		//valorB = matrizB.valor;
 	}
-	
 	// Encerra aquela thread
 	pthread_exit(NULL); 
 	return 0;
-
 }
 
 
