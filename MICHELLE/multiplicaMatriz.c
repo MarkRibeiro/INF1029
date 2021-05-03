@@ -87,16 +87,15 @@ void *calculaMatriz(void *args){
 		//Selecionando a linha de C para ser a mesma de A
 		//valorC = matrizC.valor+(linhaA*matrizA.colunas);
 		//Selecionando elementos de A
-        for(int colunaBi=0;colunaBi<colunasMatrizB;colunaBi+=8) {
+        for(int colunaBi=0;colunaBi<colunasMatrizB;colunaBi++) {
 			
 			//a = _mm256_set1_ps(valorA[j]);
-			__m256 acc = _mm256_loadu_ps(&matrizA.valor[linhaA*linhasMatrizA + colunaBi]);
+			__m256 acc = _mm256_set1_ps(matrizA.valor[linhaA*linhasMatrizA + colunaBi]);
 			for(int colunaBj=0;colunaBj<colunasMatrizB;colunaBj+=8) {
-				__m256 pLinhaA = _mm256_loadu_ps(&matrizB.valor[colunaBi*linhasMatrizA + colunaBj]);
-				__m256 pLinhaC = _mm256_loadu_ps(&matrizC.valor[linhaA*linhasMatrizA + colunaBj]);
+				__m256 pLinhaA = _mm256_load_ps(&matrizB.valor[linhaA*linhasMatrizA + colunaBj]);
+				__m256 pLinhaC = _mm256_load_ps(&matrizC.valor[linhaA*linhasMatrizA + colunaBj]);
 				__m256 pLinhaf = _mm256_fmadd_ps(pLinhaA, acc, pLinhaC);
 				_mm256_store_ps(&matrizC.valor[linhaA*linhasMatrizA + colunaBj], pLinhaf);
-				printf("aqui: %f\n", matrizC.valor[linhaA*linhasMatrizA + colunaBj]);
 
 				//acc += matrizA.valor[linhaA*linhasMatrizA + k] * matrizB.valor[k*colunasMatrizB + colunaB];
 			} 
